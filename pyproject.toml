@@ -1,0 +1,19 @@
+[project]
+name = "pdf-layout-markdown"
+version = "0.1.0"
+description = "A Python library for extracting PDF content to Markdown while preserving layout using OpenCV and PyMuPDF."
+readme = "README.md"
+repository = "https://github.com/udayzee05/pdf-layout-markdown"
+authors = [
+    { name = "rauf-alluviam", email = "intern@novusha.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "numpy==1.26.4",
+    "opencv-python>=4.11.0.86",
+    "pymupdf>=1.26.7",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
