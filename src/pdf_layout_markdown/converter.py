@@ -12,7 +12,7 @@ except ImportError:
     fitz = None
 
 from .analyzers import PageAnalyzer
-from .generators import MarkdownGenerator
+from .generators import MarkdownGenerator, FixedFormatGenerator
 from .renderers import PageRenderer
 from .visualizers import PageAnnotator
 
@@ -53,7 +53,7 @@ class PDFConverter:
         
         # Initialize components
         self.analyzer = PageAnalyzer(dpi)
-        self.generator = MarkdownGenerator(dpi)
+        self.generator = FixedFormatGenerator(dpi)
         self.renderer = PageRenderer(dpi)
         self.annotator = PageAnnotator()
     
@@ -70,7 +70,7 @@ class PDFConverter:
     def generate_markdown(self, page_num: int = 0) -> str:
         """Generate markdown for a single page."""
         analysis = self.analyze_page(page_num)
-        return self.generator.generate(analysis.text_boxes)
+        return self.generator.generate(analysis.text_boxes, context=analysis.to_dict())
     
     def create_annotated_image(self, page_num: int = 0, output_path: str = None) -> np.ndarray:
         """Create debug visualization for a page."""
@@ -101,8 +101,9 @@ class PDFConverter:
                 debug_path = self.output_dir / f"{self.pdf_path.stem}_page{i+1}_debug.png"
                 self.create_annotated_image(i, str(debug_path))
             
+            md_parts.append(f"--- PAGE {i+1} ---\n\n")
             md_parts.append(self.generate_markdown(i))
-            md_parts.append("\n\n---\n\n")
+            md_parts.append("\n\n")
         
         return "".join(md_parts)
     
